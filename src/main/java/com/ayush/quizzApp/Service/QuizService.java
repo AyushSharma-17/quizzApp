@@ -14,6 +14,7 @@ import com.ayush.quizzApp.Dao.QuizDao;
 import com.ayush.quizzApp.model.Question;
 import com.ayush.quizzApp.model.QuestionWrapper;
 import com.ayush.quizzApp.model.Quiz;
+import com.ayush.quizzApp.model.Response;
 
 @Service
 public class QuizService {
@@ -49,6 +50,20 @@ return ResponseEntity.status(HttpStatus.CREATED).body("Quiz created successfully
             questionsForUser.add(qw);
         }
         return ResponseEntity.ok(questionsForUser);
+    }
+
+    public ResponseEntity<Integer> calculateScore(Integer id, List<Response> responses) {
+        Quiz quiz= quizDao.findById(id).get();
+        List<Question> questions= quiz.getQuestions();
+        int right=0;
+        int i=0;
+        for(Response r: responses){
+             if(r.getResponse().equals(questions.get(i).getRightanswer())){
+                right++;
+             }
+             i++;
+        }
+        return new ResponseEntity<Integer>(right, HttpStatus.OK);
     }
 
 }

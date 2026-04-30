@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ayush.quizzApp.Service.QuestionService;
+import com.ayush.quizzApp.Service.QuizService;
 import com.ayush.quizzApp.model.Question;
+import com.ayush.quizzApp.model.Response;
 
 
 
@@ -23,6 +25,9 @@ public class QuestionController {
       
     @Autowired
     QuestionService questionService;
+
+    @Autowired
+    QuizService quizService;
 
     @GetMapping("allQuestions")
     public ResponseEntity<List<Question>> getAllQuestions() {
@@ -40,6 +45,12 @@ public class QuestionController {
     public ResponseEntity<String> addQuestion(@RequestBody Question question) 
     {
         return questionService.addQuestion(question);
+    }
+    @PostMapping("submit/{id}")
+    public ResponseEntity<Integer>submitQuiz(@PathVariable Integer id, @RequestBody List<Response>responses) {
+        
+        
+        return quizService.calculateScore(id,responses);
     }
     
     
